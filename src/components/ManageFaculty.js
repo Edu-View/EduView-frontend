@@ -1,0 +1,182 @@
+import React from 'react'
+import { GiHamburgerMenu } from 'react-icons/gi'
+import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
+import { MdGroupAdd } from 'react-icons/md'
+import { FaRegBuilding } from 'react-icons/fa'
+import { useState, useRef, useEffect } from 'react'
+import Spinner from './Spinner'
+import axios from '../api/axios'
+
+const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
+  const [facultyVal, setFcaultyVal] = useState("")
+  const [errMsg, setErrMsg] = useState("")
+  const [stdForm, setStdForm] = useState(false)
+  const [roll, setRoll] = useState("")
+  const [updateId, setUpdateId] = useState("")
+  const [rollAray, setRollArray] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const FAC_URL = "/faculty"
+  const errRef = useRef()
+
+  useEffect(() => {
+    setErrMsg('')
+  }, [facultyVal])
+
+  const addFaculty = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    try {
+
+      await axios.post(FAC_URL, JSON.stringify({ faculty: facultyVal, subjects: [], students: [] }), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
+      }
+
+      )
+      const response = await axios.get("faculty")
+      setFaculty(response.data)
+      setFcaultyVal("")
+      setIsLoading(false)
+    }
+    catch (err) {
+      setIsLoading(false)
+      if (!err?.response) {
+        setErrMsg("No Server Response!")
+      }
+      else if (err.response?.status === 400) {
+        setErrMsg("Please enter a Faculty name")
+      }
+      else if (err.response?.status === 409) {
+        setErrMsg("Duplicate Faculty")
+      }
+      else {
+        setErrMsg(err)
+      }
+      errRef.current.focus()
+    }
+    finally {
+      setIsLoading(false)
+    }
+  }
+
+  const deleteFaculty = async (id) => {
+    try {
+      await axios.delete(FAC_URL, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true,
+        data: JSON.stringify({ id }) // Send data in the 'data' field
+      });
+
+      const response = await axios.get("faculty")
+      setFaculty(response.data)
+
+    } catch (err) {
+      setErrMsg(err)
+    }
+  }
+
+
+  const handleStdForm = (id) => {
+    setStdForm(true)
+    setRollArray((faculty.filter((fac) => fac._id === id))[0].students)
+    setUpdateId(id)
+  }
+
+
+  const handleAdd = (e) => {
+    e.preventDefault()
+    if (!rollAray.includes(roll)) {
+      setRollArray(prev => [...prev, student.find((std) => std.rollno === roll)._id])
+      setRoll("")
+    }
+    else {
+      setRoll("")
+    }
+  }
+
+
+  const handleUpdate = async () => {
+    try {
+      await axios.put(FAC_URL, JSON.stringify({ id: updateId, students: rollAray }), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
+      }
+      )
+      const response = await axios.get("faculty")
+      await setFaculty(response.data)
+
+      setStdForm(false)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
+
+  return (
+    <section className='w-full  h-screen bg-[#e5e5e5] flex flex-col'>
+      <article className='flex font-bold font-Concert text-xl p-4 shadow-md items-center shadow-[#13213d] py-6  bg-[#fff] '>
+        <button className='block sm:hidden p-2'>
+          <GiHamburgerMenu className=' w-10 h-10' onClick={() => setMobile(!mobile)} />
+        </button>
+        <h2 className='px-2'>Faculty</h2>
+      </article>
+      <article className='p-4'>
+        <form onSubmit={addFaculty} className='flex items-center p-2 gap-7 mb-6 flex-wrap w-full lg:w-1/2' name='faculty adding form'>
+          <input type="text" value={facultyVal} onChange={(e) => setFcaultyVal(e.target.value)} required className='bg-white rounded-lg p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d]  grow ' placeholder='Faculty name' />
+          <button type='submit' className=' bg-[#fca311] rounded-2xl p-4  hover:scale-105 shadow-md shadow-[#13213d] text-[#000]'>
+            {isLoading && <Spinner />}
+            {!isLoading && <FaPlus />}
+
+          </button>
+          <p ref={errRef} className={errMsg ? ' text-red-600 font-Concert font-bold ' : 'opacity-0'} aria-live='assertive'>{errMsg}</p>
+        </form>
+        <ul className='w-full flex flex-col gap-4 items-start p-2 overflow-y-auto  grow'>
+          {faculty.map((faculty) =>
+          (<li key={faculty._id} className='w-full lg:w-2/3 shadow-sm  p-4 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000] gap-2'>
+            <span className='w-72 text-lg flex items-center gap-4'><FaRegBuilding className='w-5 h-5' />{faculty.faculty}</span>
+            <MdGroupAdd title='add guardian student' className='text-[#000] hover:text-[#fca311] w-8 h-8' onClick={() => handleStdForm(faculty._id)} />
+            <FaTrash onClick={() => deleteFaculty(faculty._id)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-5 h-5' />
+          </li>)
+          )}
+        </ul>
+
+      </article>
+      {stdForm &&
+        <article className='w-screen h-screen bg-transparent fixed left-0 top-0 flex justify-center items-center p-2'>
+          <form className='flex flex-col bg-[#000] border border-[#fff] p-6 w-full lg:w-1/2  text-[#fca311] gap-4 rounded-xl animate-open-menu flew' onSubmit={(e) => e.preventDefault()} name='faculty-form'>
+            <label htmlFor="student">{faculty.filter(fac => fac._id === updateId)[0].faculty}</label>
+            <span className='flex justify-start gap-6 flex-wrap'>
+              <input list="studentForm" id="student" name="student" className='outline-none p-2 text-[#000]  border-[#fca311] border rounded-xl' value={roll} onChange={(e) => setRoll(e.target.value)} />
+              <datalist id="studentForm">
+                {
+                  student.map((std) =>
+                    <option value={std.rollno}>
+                      {std.rollno}
+                    </option>
+                  )
+                }
+
+              </datalist>
+              <button className='bg-[#fca311] text-[#000] px-4 rounded-xl' onClick={handleAdd}>Add</button>
+              <button type='submit' onClick={() => handleUpdate()} className='bg-[#fca311] text-[#000] px-4 rounded-xl p-2'>Done</button>
+              <button onClick={() => setStdForm(!stdForm)} className='bg-[#fca311] text-[#000] px-4 rounded-xl p-2'>Cancel</button>
+            </span>
+            <span className='flex gap-4 flex-wrap overflow-y-auto'>
+              {rollAray.map((element, index) =>
+                <span className='bg-[#e5e5e5] text-[#000] p-2 rounded-xl flex items-center justify-between gap-2' key={index}>{student.find(std => std._id === element).rollno}
+                  <button onClick={() => setRollArray(rollAray.filter(roll => roll !== element))}><FaTimes className='hover:text-[#fca311]' /></button>
+                </span>
+              )}
+            </span>
+          </form>
+        </article>
+      }
+
+    </section>
+  )
+}
+
+export default ManageFaculty
