@@ -262,8 +262,6 @@ const Admin = () => {
       const facId = faculty.find(fac => fac.students.includes(deleteId))._id
       const studentArray = (faculty.find(fac => fac.students.includes(deleteId)).students)
       const rollarray = studentArray.filter(std => std !== deleteId)
-      const response = await axios.get("student")
-      await sorting(response.data);
       await axios.put("/faculty", JSON.stringify({ id: facId, students: rollarray }), {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
@@ -279,6 +277,9 @@ const Admin = () => {
         withCredentials: true
       }
       )
+
+      const response = await axios.get("student")
+      await sorting(response.data);
       setIsLoading(false)
 
     } catch (err) {
