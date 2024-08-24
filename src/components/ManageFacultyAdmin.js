@@ -214,7 +214,7 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
         (<li key={admin._id} className='w-full shadow-sm  p-4 font-Concert rounded-xl  flex  flex-col lg:flex-row  justify-between  shadow-[#13213d] items-start  lg:items-center  bg-[#fff] text-[#000] gap-2'>
           <span className='flex items-center gap-4 w-72'><MdOutlineAdminPanelSettings className='w-5 h-5' />{admin.faculty}</span>
           <span className='w-44'>{admin.username}</span>
-          <span>{admin.email}</span>
+          <span className='w-48'>{admin.email}</span>
           <FaEdit onClick={() => handleUpdateForm(admin._id, admin.username, admin.email, admin.faculty)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-6 h-6' />
           <IoKey onClick={() => handleResetForm(admin.email, admin.username)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-6 h-6' />
           <FaTrash onClick={() => deleteFacultyAdmin(admin._id)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-5 h-5' />

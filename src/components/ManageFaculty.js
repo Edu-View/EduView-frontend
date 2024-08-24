@@ -124,7 +124,7 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
         <h2 className='px-2'>Faculty</h2>
       </article>
       <article className='p-4'>
-        <form onSubmit={addFaculty} className='flex items-center p-2 gap-7 mb-6 flex-wrap w-full lg:w-1/2' name='faculty adding form'>
+        <form onSubmit={addFaculty} className='flex items-center p-2 gap-7  flex-wrap w-full lg:w-1/2' name='faculty adding form'>
           <input type="text" value={facultyVal} onChange={(e) => setFcaultyVal(e.target.value)} required className='bg-white rounded-lg p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d]  grow ' placeholder='Faculty name' />
           <button type='submit' className=' bg-[#fca311] rounded-2xl p-4  hover:scale-105 shadow-md shadow-[#13213d] text-[#000]'>
             {isLoading && <Spinner />}
@@ -133,17 +133,16 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
           </button>
           <p ref={errRef} className={errMsg ? ' text-red-600 font-Concert font-bold ' : 'opacity-0'} aria-live='assertive'>{errMsg}</p>
         </form>
-        <ul className='w-full flex flex-col gap-4 items-start p-2 overflow-y-auto  grow'>
-          {faculty.map((faculty) =>
-          (<li key={faculty._id} className='w-full lg:w-2/3 shadow-sm  p-4 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000] gap-2'>
-            <span className='w-72 text-lg flex items-center gap-4'><FaRegBuilding className='w-5 h-5' />{faculty.faculty}</span>
-            <MdGroupAdd title='add guardian student' className='text-[#000] hover:text-[#fca311] w-8 h-8' onClick={() => handleStdForm(faculty._id)} />
-            <FaTrash onClick={() => deleteFaculty(faculty._id)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-5 h-5' />
-          </li>)
-          )}
-        </ul>
-
       </article>
+      <ul className='w-full flex flex-col gap-4 items-start  overflow-y-auto  grow p-4'>
+        {faculty.map((faculty) =>
+        (<li key={faculty._id} className='w-full shadow-sm  p-4 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000] gap-8 lg:gap-14'>
+          <span className=' text-lg flex items-center gap-4 grow'><FaRegBuilding className='w-5 h-5' />{faculty.faculty}</span>
+          <MdGroupAdd title='add guardian student' className='text-[#000] hover:text-[#fca311] w-8 h-8' onClick={() => handleStdForm(faculty._id)} />
+          <FaTrash onClick={() => deleteFaculty(faculty._id)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-5 h-5' />
+        </li>)
+        )}
+      </ul>
       {stdForm &&
         <article className='w-screen h-screen bg-transparent fixed left-0 top-0 flex justify-center items-center p-2'>
           <form className='flex flex-col bg-[#000] border border-[#fff] p-6 w-full lg:w-1/2  text-[#fca311] gap-4 rounded-xl animate-open-menu flew' onSubmit={(e) => e.preventDefault()} name='faculty-form'>

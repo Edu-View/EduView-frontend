@@ -191,10 +191,10 @@ const Student = () => {
               </section>
 
               <section className='w-full lg:w-1/2  shadow-sm  p-4 font-Concert rounded-xl  flex justify-start gap-4  shadow-[#13213d] items-center  bg-[#fff] text-[#000]'>
-                <TbSquareRoundedLetterG className='w-5 h-5' />Guardian : {teacher.find(teacher => (teacher.students).includes(student.rollno))?.username}
+                <TbSquareRoundedLetterG className='w-5 h-5' />Guardian : {teacher.find(teacher => (teacher.students).includes(student._id))?.username}
               </section>
               <section className='w-full lg:w-1/2  shadow-sm  p-4 font-Concert rounded-xl  flex justify-start gap-4  shadow-[#13213d] items-center  bg-[#fff] text-[#000]'>
-                <FaRegBuilding className='w-5 h-5' />Faculty : {teacher.find(teacher => (teacher.students).includes(student.rollno))?.faculty}
+                <FaRegBuilding className='w-5 h-5' />Faculty : {teacher.find(teacher => (teacher.students).includes(student._id))?.faculty}
               </section>
 
             </section>

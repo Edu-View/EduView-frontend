@@ -94,7 +94,7 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
           </span>
           <button
             type='submit'
-            className='border bg-[#fca311] rounded-2xl p-4 hover:scale-105 shadow-md shadow-[#13213d] text-black flex items-center'
+            className=' bg-[#fca311] rounded-2xl p-4  hover:scale-105 shadow-md shadow-[#13213d] text-[#000]'
           >
             {isLoading ? <Spinner /> : <FaPlus />}
           </button>
