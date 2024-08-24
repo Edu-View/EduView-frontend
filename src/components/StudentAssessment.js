@@ -11,7 +11,7 @@ const StudentAssessment = ({ assessment, student, mobile, setMobile, students })
     useEffect(() => {
         let updatedList = [];
         student.forEach(std => {
-            let filteredAssessments = assessment.filter(res => res.rollno === students.find(stud => stud._id === std));
+            let filteredAssessments = assessment.filter(res => res.rollno === students.find(stud => stud._id === std).rollno);
             if (filteredAssessments.length > 0) {
                 updatedList.push(filteredAssessments);
             }
