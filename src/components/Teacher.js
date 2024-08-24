@@ -85,7 +85,7 @@ const Teacher = () => {
         }
         )
 
-       
+
         setPwdForm(false)
         setOldPwd("")
         setNewPwd("")
@@ -239,7 +239,7 @@ const Teacher = () => {
         }
         {
           page === "result" &&
-          <GuardianExamResult result={result} mobile={mobile} setMobile={setMobile} student={teacher.students} />
+          <GuardianExamResult result={result} mobile={mobile} setMobile={setMobile} student={teacher.students} students={student} />
         }
         {
           page === "assessment" &&

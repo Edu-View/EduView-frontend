@@ -4,11 +4,11 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { IoMdCodeDownload } from 'react-icons/io';
 import * as XLSX from 'xlsx';
 
-const GuardianExamResult = ({ result, student, mobile, setMobile }) => {
+const GuardianExamResult = ({ result, student, mobile, setMobile, students }) => {
   const [list, setList] = useState([])
   useEffect(() => {
     const updatedList = student.map(std => {
-      const foundResult = result.find(res => res.rollno === std);
+      const foundResult = result.find(res => res.rollno === students.find(stud => stud._id === std).rollno);
       return foundResult;
     });
     setList(updatedList.filter(item => item !== undefined));
