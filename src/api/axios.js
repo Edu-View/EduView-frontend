@@ -1,4 +1,4 @@
 import axios from "axios";
 export default axios.create({
-    baseURL: "https://backendapi-14sv.onrender.com"
+    baseURL: "https://eduview-backend.onrender.com"
 });
