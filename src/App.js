@@ -30,9 +30,9 @@ function App() {
         <Route element={<RequiredAuth allowedRoles="Student" />}>
           <Route path="student" element={<Student />} />
         </Route>
-
-        <Route path="*" element={<Login />} />
-
+        <Route>
+          <Route path="*" element={<Login />} />
+        </Route>
       </Route>
     </Routes>
   );
