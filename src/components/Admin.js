@@ -577,6 +577,7 @@ const Admin = () => {
                 <GiHamburgerMenu className=' w-10 h-10' onClick={() => setMobile(!mobile)} />
               </button>
               <h2 >Students</h2>
+              
             </article>
             <section className='flex flex-row shadow-md items-center py-3'>
               <form onSubmit={(e) => e.preventDefault()} className='px-6  p-2 flex justify-start items-center flex-wrap  gap-4' name='search student form'>
