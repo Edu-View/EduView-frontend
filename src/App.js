@@ -5,8 +5,7 @@ import Student from "./components/Student";
 import FacultyAdmin from "./components/FacultyAdmin";
 import Layout from "./components/Layout";
 import RequiredAuth from "./components/RequiredAuth";
-import { Routes, Route, Navigate } from "react-router-dom";
-
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
@@ -31,7 +30,7 @@ function App() {
           <Route path="student" element={<Student />} />
         </Route>
 
-        <Route path="*" element={<Login />} />
+
       </Route>
     </Routes>
   );
