@@ -8,10 +8,8 @@ import axios from './api/axios'
 import { useNavigate } from 'react-router-dom'
 import Spinner from './components/Spinner'
 const Login = () => {
-
   const { setAuth } = useAuth()
   const navigate = useNavigate()
-
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [show, setShow] = useState(false)
@@ -21,10 +19,6 @@ const Login = () => {
   const [visible, setVisible] = useState(false)
   const [login, setlogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const [pwdForm, setPwdForm] = useState(false)
-  const [oldPwd, setOldPwd] = useState("")
-  const [newPwd, setNewPwd] = useState("")
-  const [confirmPwd, setConfirmPwd] = useState("")
 
   const errRef = useRef();
   const loginRef = useRef();
@@ -88,6 +82,7 @@ const Login = () => {
   const handleVisible = () => {
     setVisible(!visible)
   }
+
   const handleLoginButton = () => {
     setShow(!show)
     setlogin(!login)
