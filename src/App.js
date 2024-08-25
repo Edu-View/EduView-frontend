@@ -31,7 +31,7 @@ function App() {
           <Route path="student" element={<Student />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="https://eduview.onrender.com/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
 
       </Route>
     </Routes>
