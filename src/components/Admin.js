@@ -267,6 +267,10 @@ const Admin = () => {
         withCredentials: true
       }
       )
+
+      const response = await axios.get("student")
+      await sorting(response.data);
+      setIsLoading(false)
       const facresponse = await axios.get("faculty")
       await setFaculty(facresponse.data)
       const guardianId = teacher.find(fac => fac.students.includes(deleteId))._id
@@ -277,10 +281,6 @@ const Admin = () => {
         withCredentials: true
       }
       )
-
-      const response = await axios.get("student")
-      await sorting(response.data);
-      setIsLoading(false)
 
     } catch (err) {
       setIsLoading(false)

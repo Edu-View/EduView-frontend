@@ -95,6 +95,7 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
 
   const updateFacultyAdmin = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
     try {
 
       await axios.put(ADMIN_URL, JSON.stringify({ id: adminId, username: adminName, faculty: fac, email: adminMail }), {
@@ -109,8 +110,10 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
       setAdminName("")
       setAdminMail("")
       setAdminPwd("")
+      setIsLoading(false)
 
     } catch (err) {
+      setIsLoading(false)
       if (!err?.response) {
         setErrMsg("No Server Response!")
       }
@@ -125,12 +128,16 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
       }
       errRef.current.focus()
     }
+
+    finally {
+      setIsLoading(false)
+    }
   }
 
   const resetPassword = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
     try {
-
       await axios.put("facultyadminauth/reset", JSON.stringify({ email: adminMail, pwd: reset }), {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
@@ -154,6 +161,10 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
         setErrMsg(err)
       }
       errRef.current.focus()
+      setIsLoading(false)
+    }
+    finally {
+      setIsLoading(false)
     }
   }
   const handleUpdateCancel = () => {
@@ -237,7 +248,10 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
 
             </select>
             <span>
-              <button type='submit' className='bg-[#fca311] p-2 px-8 my-4 mr-10 text-[#14213d] outline-none rounded-md' onClick={updateFacultyAdmin}>Update</button>
+              <button type='submit' className='bg-[#fca311] p-2 px-8 my-4 mr-10 text-[#14213d] outline-none rounded-md' onClick={updateFacultyAdmin}>
+                {isLoading && <Spinner />}
+                {!isLoading && <span>Update</span>}
+              </button>
               <button onClick={handleUpdateCancel} className='bg-[#fca311] p-2 px-8 my-4 mr-10 text-[#14213d] outline-none rounded-md'>Cancel</button>
             </span>
           </form>
@@ -255,7 +269,10 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
               {!visible && reset && <FaEyeSlash onClick={() => setVisible(!visible)} className='w-4 h-4 bg-white mx-2 cursor-pointer text-[#000]' />}
             </span>
             <span>
-              <button type='submit' className='bg-[#fca311] p-2 px-8 my-4 mr-10 text-[#14213d] outline-none rounded-md' onClick={resetPassword}>Reset</button>
+              <button type='submit' className='bg-[#fca311] p-2 px-8 my-4 mr-10 text-[#14213d] outline-none rounded-md' onClick={resetPassword}>
+                {isLoading && <Spinner />}
+                {!isLoading && <span>Reset</span>}
+              </button>
               <button onClick={handleResetCancel} className='bg-[#fca311] p-2 px-8 my-4 mr-10 text-[#14213d] outline-none rounded-md'>Cancel</button>
             </span>
           </form>

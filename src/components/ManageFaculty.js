@@ -98,6 +98,7 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
 
 
   const handleUpdate = async () => {
+    setIsLoading(true)
     try {
       await axios.put(FAC_URL, JSON.stringify({ id: updateId, students: rollAray }), {
         headers: { "Content-Type": "application/json" },
@@ -108,8 +109,14 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
       await setFaculty(response.data)
 
       setStdForm(false)
+      setIsLoading(false)
     } catch (err) {
       console.log(err);
+      setIsLoading(false)
+    }
+
+    finally {
+      setIsLoading(false)
     }
   }
 
@@ -160,7 +167,10 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
 
               </datalist>
               <button className='bg-[#fca311] text-[#000] px-4 rounded-xl' onClick={handleAdd}>Add</button>
-              <button type='submit' onClick={() => handleUpdate()} className='bg-[#fca311] text-[#000] px-4 rounded-xl p-2'>Done</button>
+              <button type='submit' onClick={() => handleUpdate()} className='bg-[#fca311] text-[#000] px-4 rounded-xl p-2'>
+                {isLoading && <Spinner />}
+                {!isLoading && <span>Done</span>}
+              </button>
               <button onClick={() => setStdForm(!stdForm)} className='bg-[#fca311] text-[#000] px-4 rounded-xl p-2'>Cancel</button>
             </span>
             <span className='flex gap-4 flex-wrap overflow-y-auto'>

@@ -3,12 +3,18 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { useState, useEffect } from 'react'
 import { IoMdCodeDownload } from 'react-icons/io';
 import { MdQuestionAnswer } from 'react-icons/md';
+import { FaTrash } from 'react-icons/fa';
+import axios from '../api/axios';
+import useAuth from '../hooks/useAuth';
 import * as XLSX from 'xlsx';
 const GuardianAssessment = ({ assessment, student, mobile, setMobile, subject }) => {
+    const { auth } = useAuth();
     const [list, setList] = useState([])
     const [sub, setSub] = useState(subject[0]?.subject)
     const [typeArray, setTypeArray] = useState("")
     const [type, setType] = useState("")
+    const [confirmForm, setConfirmForm] = useState(false)
+    const [confirmQuestion, setConfirmQuestion] = useState("")
 
     const sorting = (student) => {
         const rollOrder = {
@@ -79,6 +85,24 @@ const GuardianAssessment = ({ assessment, student, mobile, setMobile, subject })
         document.body.removeChild(link);
     };
 
+    const handleDeleteAll = async () => {
+        setConfirmQuestion("")
+        setConfirmForm(false)
+        try {
+            await axios.delete("/assessment/all", {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            });
+
+            setList([])
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
 
     return (
         <section className='w-full  h-screen bg-[#e5e5e5] flex flex-col'>
@@ -116,6 +140,11 @@ const GuardianAssessment = ({ assessment, student, mobile, setMobile, subject })
                 )
                 }
                 <button onClick={exportToExcel} className=' border  bg-[#fca311] p-3 rounded-lg hover:scale-x-105 px-6 shadow-md shadow-[#13213d] flex items-center gap-2'>Download <IoMdCodeDownload className='w-6 h-6' /></button>
+                {
+                    auth.roles === "Admin" &&
+                    <button onClick={() => setConfirmForm(true)} className='    bg-[#000] text-[#e5e5e5] p-3 rounded-2xl hover:scale-x-105 px-6 shadow-md shadow-[#13213d] flex items-center gap-2'>Delete all Assessment<FaTrash /></button>
+                }
+
             </form>
 
             <article className='p-4 overflow-y-auto flex flex-col gap-4 grow '>
@@ -132,7 +161,26 @@ const GuardianAssessment = ({ assessment, student, mobile, setMobile, subject })
                     ))
                 ))}
 
+
             </article>
+
+            {confirmForm &&
+                <article className='fixed left-0 top-0 bg-transparent w-screen h-screen flex justify-center items-center'>
+
+                    <form className='p-6 bg-[#000] text-[#e5e5e5] rounded-xl fixed top-2/4 flex flex-col gap-6 animate-open-menu' onSubmit={(e) => e.preventDefault()} name='all result deleting form'>
+                        <p className='text-xl'>Write "Delete all assessment" to delete all assessment?</p>
+                        <span>
+                            <input type="text" name='confirm' className='p-2   border focus:border-[#fca311]  rounded-lg font-Concert shadow-md shadow-[#13213d]  outline-none w-full text-[#000]' autoComplete='off' value={confirmQuestion} onChange={(e) => setConfirmQuestion(e.target.value)} />
+                        </span>
+                        <span>
+                            <button type='submit' className='bg-[#f00] p-2 px-4 rounded-lg mt-2 mr-4 disabled:opacity-55 disabled:pointer-events-none' onClick={handleDeleteAll} disabled={confirmQuestion === "Delete all assessment" ? false : true}>
+                                Delete
+                            </button>
+                            <button className='bg-[#e5e5e5] p-2 px-4 rounded-lg mt-2 mr-4 text-[#14213d]' onClick={() => setConfirmForm(false)}>Cancel</button>
+                        </span>
+                    </form>
+                </article>
+            }
 
         </section>
     )

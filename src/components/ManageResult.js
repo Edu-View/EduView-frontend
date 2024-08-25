@@ -26,6 +26,7 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
   const [datetime, setDatetime] = useState()
   const [isRotate, setIsRotate] = useState(false)
   const [confirmForm, setConfirmForm] = useState(false)
+  const [confirmQuestion, setConfirmQuestion] = useState("")
 
 
   const sorting = (student) => {
@@ -283,6 +284,8 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
   }
 
   const handleDeleteAll = async () => {
+    setConfirmForm(false)
+    setConfirmQuestion("")
     try {
       await axios.delete("/result/all", {
         headers: {
@@ -290,8 +293,7 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
         },
         withCredentials: true
       });
-      const response = await axios.get(result)
-      setList(response.data)
+      setList([])
     } catch (err) {
       console.log(err);
     }
@@ -424,10 +426,13 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
       {confirmForm &&
         <article className='fixed left-0 top-0 bg-transparent w-screen h-screen flex justify-center items-center'>
 
-          <form className='p-6 bg-[#000] text-[#e5e5e5] rounded-xl fixed top-2/4 flex flex-col gap-10 animate-open-menu' onSubmit={(e) => e.preventDefault()} name='all result deleting form'>
-            <p className='text-xl'>Do you want to delete all Result?</p>
+          <form className='p-6 bg-[#000] text-[#e5e5e5] rounded-xl fixed top-2/4 flex flex-col gap-6 animate-open-menu' onSubmit={(e) => e.preventDefault()} name='all result deleting form'>
+            <p className='text-xl'>Write "Delete all result" to delete all result?</p>
             <span>
-              <button type='submit' className='bg-[#f00] p-2 px-4 rounded-lg mt-2 mr-4' onClick={handleDeleteAll} >
+              <input type="text" name='confirm' className='p-2   border focus:border-[#fca311]  rounded-lg font-Concert shadow-md shadow-[#13213d]  outline-none w-full text-[#000]' autoComplete='off' value={confirmQuestion} onChange={(e) => setConfirmQuestion(e.target.value)} />
+            </span>
+            <span>
+              <button type='submit' className='bg-[#f00] p-2 px-4 rounded-lg mt-2 mr-4 disabled:opacity-55 disabled:pointer-events-none' onClick={handleDeleteAll} disabled={confirmQuestion === "Delete all result" ? false : true}>
                 Delete
               </button>
               <button className='bg-[#e5e5e5] p-2 px-4 rounded-lg mt-2 mr-4 text-[#14213d]' onClick={() => setConfirmForm(false)}>Cancel</button>
