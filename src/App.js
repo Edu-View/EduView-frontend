@@ -31,7 +31,7 @@ function App() {
           <Route path="student" element={<Student />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Login />} />
       </Route>
     </Routes>
   );
