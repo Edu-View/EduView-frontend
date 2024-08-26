@@ -198,8 +198,8 @@ const ManageFacultyAdmin = ({ facultyAdmin, setFacultyAdmin, mobile, setMobile, 
       </article>
       <article className='p-4 '>
         {<form onSubmit={addFacultyAdmin} className='flex flex-row gap-4 items-center flex-wrap  p-2' name='faculty_admin_adding_form'>
-          <input type="text" value={adminName} onChange={(e) => setAdminName(e.target.value)} required className='bg-white rounded-lg p-2 md:p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d] w-1/3 lg:w-1/6' placeholder='Admin Name' />
-          <input type="mail" value={adminMail} onChange={(e) => setAdminMail(e.target.value)} required className='bg-white rounded-lg p-2 md:p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d]  w-1/2 md:w-1/4' placeholder='Admin Mail' />
+          <input type="text" value={adminName} onChange={(e) => setAdminName(e.target.value)} required className='bg-white rounded-lg p-2 md:p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d] w-1/3 lg:w-1/6' placeholder='Admin Name' autoComplete='off' />
+          <input type="mail" value={adminMail} onChange={(e) => setAdminMail(e.target.value)} required className='bg-white rounded-lg p-2 md:p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d]  w-1/2 md:w-1/4' placeholder='Admin Mail' autoComplete='off' />
           <span className='flex bg-[#fff] items-center rounded-lg p-2 md:p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d] w-1/3  md:w-1/5'>
             <input type={visible ? 'text' : 'password'} id="password" value={adminPwd} onChange={(e) => setAdminPwd(e.target.value)} className='text-[#14213d] w-full outline-none rounded-md' required autoComplete='off' placeholder='Password' />
             {visible && adminPwd && <FaEye onClick={() => setVisible(!visible)} className='w-4 h-4 bg-white mx-2 cursor-pointer text-[#000]' />}

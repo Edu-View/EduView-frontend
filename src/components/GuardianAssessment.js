@@ -168,7 +168,7 @@ const GuardianAssessment = ({ assessment, student, mobile, setMobile, subject })
                 <article className='fixed left-0 top-0 bg-transparent w-screen h-screen flex justify-center items-center'>
 
                     <form className='p-6 bg-[#000] text-[#e5e5e5] rounded-xl fixed top-2/4 flex flex-col gap-6 animate-open-menu' onSubmit={(e) => e.preventDefault()} name='all result deleting form'>
-                        <p className='text-xl'>Write "Delete all assessment" to delete all assessment?</p>
+                        <p className='text-xl'>Type "Delete all assessment" below to delete all assessment</p>
                         <span>
                             <input type="text" name='confirm' className='p-2   border focus:border-[#fca311]  rounded-lg font-Concert shadow-md shadow-[#13213d]  outline-none w-full text-[#000]' autoComplete='off' value={confirmQuestion} onChange={(e) => setConfirmQuestion(e.target.value)} />
                         </span>
