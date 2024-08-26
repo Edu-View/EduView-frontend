@@ -6,11 +6,13 @@ import { FaRegBuilding } from 'react-icons/fa'
 import { useState, useRef, useEffect } from 'react'
 import Spinner from './Spinner'
 import axios from '../api/axios'
+import { FaUsersViewfinder } from 'react-icons/fa6'
 
 const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
   const [facultyVal, setFcaultyVal] = useState("")
   const [errMsg, setErrMsg] = useState("")
   const [stdForm, setStdForm] = useState(false)
+  const [stdInfo, setStdInfo] = useState(false)
   const [roll, setRoll] = useState("")
   const [updateId, setUpdateId] = useState("")
   const [rollAray, setRollArray] = useState()
@@ -84,6 +86,12 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
     setUpdateId(id)
   }
 
+  const handlStdInfo = (id) => {
+    setStdInfo(true)
+    setRollArray((faculty.filter((fac) => fac._id === id))[0].students)
+    setUpdateId(id)
+  }
+
 
   const handleAdd = (e) => {
     e.preventDefault()
@@ -145,7 +153,8 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
         {faculty.map((faculty) =>
         (<li key={faculty._id} className='w-full shadow-sm  p-4 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000] gap-8 lg:gap-14'>
           <span className=' text-lg flex items-center gap-4 grow'><FaRegBuilding className='w-5 h-5' />{faculty.faculty}</span>
-          <MdGroupAdd title='add guardian student' className='text-[#000] hover:text-[#fca311] w-8 h-8' onClick={() => handleStdForm(faculty._id)} />
+          <MdGroupAdd title='add guardian students' className='text-[#000] hover:text-[#fca311] w-8 h-8 cursor-pointer' onClick={() => handleStdForm(faculty._id)} />
+          <FaUsersViewfinder title='view guardian students' className='text-[#000] hover:text-[#fca311] w-8 h-8 cursor-pointer' onClick={() => handlStdInfo(faculty._id)} />
           <FaTrash onClick={() => deleteFaculty(faculty._id)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-5 h-5' />
         </li>)
         )}
@@ -181,6 +190,30 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
               )}
             </span>
           </form>
+        </article>
+      }
+
+      {stdInfo &&
+        <article className='w-screen h-screen bg-transparent fixed left-0 top-0 flex justify-center items-center p-2'>
+
+          <section className='flex flex-col bg-[#000] border border-[#fff] p-6 w-full lg:w-1/2  text-[#fca311] gap-4 rounded-xl animate-open-menu flew items-end'>
+            <button onClick={() => setStdInfo(!stdInfo)} className='bg-[#fca311] text-[#000] w-12 h-12  rounded-xl flex items-center justify-center'>
+              <FaTimes />
+            </button>
+            <h2 className='text-[#fca311] text-xl w-full text-left'>{faculty.filter(fac => fac._id === updateId)[0].faculty}</h2>
+            <section className='overflow-y-auto w-full flex flex-col gap-2'>
+              {!rollAray.length && <span className='text-[#fff]'>No Guardian student in this faculty</span>}
+              {rollAray.map((element, index) =>
+                <span className='bg-[#e5e5e5] text-[#000] p-2 rounded-xl flex items-center justify-start gap-8 w-full' key={index}>
+                  <span className='w-20'> {student.find(std => std._id === element).rollno}</span>
+                  <span className='w-40'>{student.find(std => std._id === element).username}</span>
+                  <span>{student.find(std => std._id === element).semester}</span>
+
+                </span>
+              )}
+            </section>
+
+          </section>
         </article>
       }
 
