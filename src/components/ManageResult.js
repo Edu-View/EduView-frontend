@@ -134,55 +134,52 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
   }
 
   const handlePost = async (e) => {
-    e.preventDefault()
-    setIsRotate(false)
+    e.preventDefault();
+    setIsRotate(false);
+
     try {
       const desiredTime = new Date(datetime);
       const now = new Date();
-      const timeUntilExecution = !datetime ? 2000 : desiredTime.getTime() - now.getTime();
-      setList(prev => [...prev,
-      {
-        rollno: rollno,
+      const timeUntilExecution = desiredTime.getTime() - now.getTime();
+
+      const newResult = {
+        rollno,
         semester: sem,
         subjects: subArr,
         grading: gradeArr,
-        gradeScore: gradeScoreArr
-      }]
-      )
-      await localStorage.setItem("result", JSON.stringify([...list, {
-        rollno: rollno,
-        semester: sem,
-        subjects: subArr,
-        grading: gradeArr,
-        gradeScore: gradeScoreArr
-      }]))
+        gradeScore: gradeScoreArr,
+        scheduledTime: desiredTime.toISOString(), // Include the scheduled time
+      };
 
-      setSubForm(false)
-      setForm(false)
-      setRollno("")
-      setSubArr([])
-      setGradeArr([])
-      setGradeScoreArr([])
-      setResult(false)
-      setCount(0)
+      setList((prev) => [...prev, newResult]);
+      localStorage.setItem("result", JSON.stringify([...list, newResult]));
 
-      if (timeUntilExecution > 0) {
-        const timer = setTimeout(async () => {
-          await axios.post("/result", JSON.stringify({ rollno: rollno, subjects: subArr, grading: gradeArr, gradeScore: gradeScoreArr, semester: sem }), {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true
-          }
+      // Reset the form
+      setSubForm(false);
+      setForm(false);
+      setRollno("");
+      setSubArr([]);
+      setGradeArr([]);
+      setGradeScoreArr([]);
+      setResult(false);
+      setCount(0);
 
-          )
-          await localStorage.setItem("result", JSON.stringify([]))
-        }, timeUntilExecution);
-        return () => clearTimeout(timer);
-      }
+      // Post immediately to the server
+      await axios.post(
+        "/result",
+        JSON.stringify(newResult),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      localStorage.setItem("result", JSON.stringify([]));
+    } catch (err) {
+      console.error("Error handling post:", err);
     }
-    catch (err) {
-      console.log(err)
-    }
-  }
+  };
+
 
   const handleEdit = (roll, sub) => {
     setUpdateForm(true)
