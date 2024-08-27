@@ -626,7 +626,7 @@ const Admin = () => {
                     <input type="text" id="email" value={stdMail} onChange={(e) => setStdMail(e.target.value)} className='text-[#14213d] p-2 w-full outline-none rounded-md' required />
                     <label htmlFor="password">Password</label>
                     <span className='flex bg-[#fff] items-center  rounded-md'>
-                      <input type={visible1 ? 'text' : 'password'} id="password" value={stdPwd} onChange={(e) => setStdPwd(e.target.value)} className='text-[#14213d] p-2 w-full outline-none rounded-md' required autoComplete='off' />
+                      <input type={visible ? 'text' : 'password'} id="password" value={stdPwd} onChange={(e) => setStdPwd(e.target.value)} className='text-[#14213d] p-2 w-full outline-none rounded-md' required autoComplete='off' />
                       {visible && stdPwd && <FaEye onClick={() => setVisible(!visible)} className='w-4 h-4 bg-white mx-2 cursor-pointer text-[#000]' />}
                       {!visible && stdPwd && <FaEyeSlash onClick={() => setVisible(!visible)} className='w-4 h-4 bg-white mx-2 cursor-pointer text-[#000]' />}
                     </span>
