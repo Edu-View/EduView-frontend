@@ -1,16 +1,14 @@
 import React from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { FaPlus, FaTrash, FaRegCalendarAlt } from 'react-icons/fa'
-import { IoIosArrowDropup, IoIosArrowDropdown } from 'react-icons/io'
 import { useState, useRef, useEffect } from 'react'
 import axios from '../api/axios'
 import Spinner from './Spinner'
 
 const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
-  const [semVal, setSemVal] = useState("Semester I")
+  const [semVal, setSemVal] = useState("")
   const [errMsg, setErrMsg] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [open, setOpen] = useState(false)
 
   const SEM_URL = "/semester"
   const errRef = useRef();
@@ -30,6 +28,7 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
       const response = await axios.get("semester")
       setSemester(response.data)
       setIsLoading(false)
+      setSemVal("")
     }
     catch (err) {
       if (!err?.response) {
@@ -69,10 +68,7 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
     }
   }
 
-  const handleClick = (val) => {
-    setSemVal(val)
-    setOpen(false)
-  }
+
 
   return (
     <section className='w-full  h-screen bg-[#e5e5e5] flex flex-col'>
@@ -82,16 +78,11 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
         </button>
         <h2 className='px-2'>Semester</h2>
       </article>
-      {!mobile && <section className='flex gap-6 items-center  text-xl  relative'>
+      <section className='flex gap-6 items-center  text-xl  relative'>
 
         <form onSubmit={addSemester} className='flex items-center gap-6 p-6 flex-wrap' name='semester-adding-form'>
-          <span
-            onClick={() => setOpen(prev => !prev)}
-            className='bg-white rounded-xl px-6 py-3 shadow-md shadow-[#13213d] flex items-center gap-4 cursor-pointer'
-          >
-            <span>{semVal}</span>
-            <span className='text-xl'>{open ? <IoIosArrowDropup /> : <IoIosArrowDropdown />}</span>
-          </span>
+          <input type="text" value={semVal} onChange={(e) => setSemVal(e.target.value)} className='bg-white rounded-lg p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d]  grow ' placeholder='Semester I' />
+
           <button
             type='submit'
             className=' bg-[#fca311] rounded-2xl p-4  hover:scale-105 shadow-md shadow-[#13213d] text-[#000]'
@@ -101,21 +92,7 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
           <p ref={errRef} className={errMsg ? ' text-red-600 font-Concert font-bold text-lg' : 'opacity-0'} aria-live='assertive'>{errMsg}</p>
         </form>
 
-        {open && (
-          <section className='flex flex-col items-start top-20 left-6 z-10 bg-white gap-1 rounded-xl shadow-lg shadow-[#13213d] border-[#fca311] border animate-dropdown max-h-72 overflow-y-auto origin-top absolute'>
-            {['Semester I', 'Semester II', 'Semester III', 'Semester IV', 'Semester V', 'Semester VI', 'Semester VII', 'Semester VIII', 'Semester IX', 'Semester X'].map((semester, index) => (
-              <button
-                key={index}
-                onClick={() => handleClick(semester)}
-                className='text-md hover:text-white p-3 flex items-center gap-2 hover:bg-[#14213d] w-full active:text-[#fca311]'
-              >
-                <FaRegCalendarAlt className='w-5 h-5' />
-                {semester}
-              </button>
-            ))}
-          </section>
-        )}
-      </section>}
+      </section>
 
       <ul className='w-full flex flex-col gap-4 items-start px-6 overflow-y-auto grow'>
         {semester.map((semester) =>
