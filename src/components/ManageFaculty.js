@@ -203,7 +203,7 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
             <section className='overflow-y-auto w-full flex flex-col gap-2'>
               {!rollAray.length && <span className='text-[#fff]'>No Guardian student in this faculty</span>}
               {rollAray.map((element, index) =>
-                <span className='bg-[#e5e5e5] text-[#000] p-2 rounded-xl flex items-center justify-start gap-8 w-full' key={index}>
+                <span className='bg-[#e5e5e5] text-[#000] p-3 rounded-xl flex items-center justify-start gap-8 w-full' key={index}>
                   <span className='w-20'> {student.find(std => std._id === element).rollno}</span>
                   <span className='w-40'>{student.find(std => std._id === element).username}</span>
                   <span>{student.find(std => std._id === element).semester}</span>
