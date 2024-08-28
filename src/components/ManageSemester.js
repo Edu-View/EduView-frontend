@@ -78,7 +78,7 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
         </button>
         <h2 className='px-2'>Semester</h2>
       </article>
-      <section className='flex gap-6 items-center  text-xl  relative'>
+      <section className='flex gap-6 items-center  text-xl'>
 
         <form onSubmit={addSemester} className='flex items-center gap-6 p-6 flex-wrap' name='semester-adding-form'>
           <input type="text" value={semVal} onChange={(e) => setSemVal(e.target.value)} className='bg-white rounded-lg p-3 focus:outline-[#fca311] text-lg shadow-md shadow-[#13213d]  grow ' placeholder='Semester I' />
