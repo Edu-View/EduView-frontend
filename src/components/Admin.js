@@ -557,11 +557,11 @@ const Admin = () => {
                     {!visible2 && confirmPwd && <FaEyeSlash onClick={() => setVisible2(!visible2)} className='w-4 h-4 bg-white mx-2 cursor-pointer text-[#000]' />}
                   </span>
                   <span className='flex gap-2'>
-                    <button type='submit' className='bg-[#fca311] p-2 px-8 text-[#000] outline-none rounded-md' onClick={updatePassword}>
+                    <button type='submit' className='bg-[#fca311] p-2 px-6 text-[#000] outline-none rounded-md' onClick={updatePassword}>
                       {isLoading && <Spinner />}
                       {!isLoading && <p>Change</p>}
                     </button>
-                    <button onClick={() => setPwdForm(false)} className='bg-[#fca311] p-2 px-8  text-[#000] outline-none rounded-md'>Cancel</button>
+                    <button onClick={() => setPwdForm(false)} className='bg-[#fca311] p-2 px-6  text-[#000] outline-none rounded-md'>Cancel</button>
                   </span>
                 </form>
               </article>
