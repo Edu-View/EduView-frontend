@@ -9,13 +9,16 @@ import Spinner from './Spinner'
 const ManageSubject = ({ subject, setSubject, mobile, setMobile, semester, facultyName, teacher, setTeacher }) => {
   const [subVal, setSubVal] = useState("")
   const [subName, setSubName] = useState("")
-  const [semVal, setSemVal] = useState("SemesterI")
+  const [semVal, setSemVal] = useState("")
   const [type, setType] = useState("CST")
   const [errMsg, setErrMsg] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const SUB_URL = "/subject"
   const errRef = useRef();
 
+  useEffect(() => {
+    setSemVal(semester?.[0].semester)
+  }, [])
 
   useEffect(() => {
     setErrMsg('')
@@ -67,15 +70,17 @@ const ManageSubject = ({ subject, setSubject, mobile, setMobile, semester, facul
         data: JSON.stringify({ id }) // Send data in the 'data' field
       });
       const teacherId = teacher.find(tch => tch.subjectcode.includes(sub))
-      const subArray = teacher.find(tch => tch.subjectcode.includes(sub)).subjectcode
-      const newSubArray = subArray.filter(subj => subj !== sub)
-      await axios.put("/teacher", JSON.stringify({ id: teacherId, subjectcode: newSubArray }), {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true
+      if (teacherId) {
+        const subArray = teacher.find(tch => tch.subjectcode.includes(sub)).subjectcode
+        const newSubArray = subArray.filter(subj => subj !== sub)
+        await axios.put("/teacher", JSON.stringify({ id: teacherId, subjectcode: newSubArray }), {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true
+        }
+        )
+        const teacherResponse = await axios.get("teacher")
+        setTeacher(teacherResponse.data)
       }
-      )
-      const teacherResponse = await axios.get("teacher")
-      setTeacher(teacherResponse.data)
       const response = await axios.get("subject")
       setSubject(response.data)
 
