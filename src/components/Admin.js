@@ -535,7 +535,7 @@ const Admin = () => {
             </section>
             {pwdForm &&
               <article className='w-screen h-screen bg-transparent fixed left-0 top-0 flex justify-center items-center' >
-                <form className='flex flex-col bg-[#000] p-8 w-full lg:w-1/3  text-[#fca311] gap-2 rounded-xl animate-open-menu max-w-96  shadow-lg shadow-[#13213d]' name="change password form">
+                <form className='flex flex-col bg-[#000] p-8 w-3/4 lg:w-1/3  text-[#fca311] gap-2 rounded-xl animate-open-menu max-w-96  shadow-lg shadow-[#13213d]' name="change password form">
                   <p ref={errRef} className={errMsg ? ' text-red-600 font-Concert font-bold p-2' : 'opacity-0'} aria-live='assertive'>{errMsg}</p>
                   <h3 className='text-lg border-b border-[#fca311] pb-3 mb-3'>Change Your Password</h3>
                   <label htmlFor="old">Old Password</label>

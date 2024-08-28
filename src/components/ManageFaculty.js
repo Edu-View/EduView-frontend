@@ -144,17 +144,16 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
           <button type='submit' className=' bg-[#fca311] rounded-2xl p-4  hover:scale-105 shadow-md shadow-[#13213d] text-[#000]'>
             {isLoading && <Spinner />}
             {!isLoading && <FaPlus />}
-
           </button>
           <p ref={errRef} className={errMsg ? ' text-red-600 font-Concert font-bold ' : 'opacity-0'} aria-live='assertive'>{errMsg}</p>
         </form>
       </article>
       <ul className='w-full flex flex-col gap-4 items-start  overflow-y-auto  grow p-4'>
         {faculty.map((faculty) =>
-        (<li key={faculty._id} className='w-full shadow-sm  p-4 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000] gap-8 lg:gap-14'>
-          <span className=' text-lg flex items-center gap-4 grow'><FaRegBuilding className='w-5 h-5' />{faculty.faculty}</span>
-          <MdGroupAdd title='add guardian students' className='text-[#000] hover:text-[#fca311] w-8 h-8 cursor-pointer' onClick={() => handleStdForm(faculty._id)} />
-          <FaUsersViewfinder title='view guardian students' className='text-[#000] hover:text-[#fca311] w-8 h-8 cursor-pointer' onClick={() => handlStdInfo(faculty._id)} />
+        (<li key={faculty._id} className='w-full shadow-sm  p-4 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000] gap-8 lg:gap-14 '>
+          <span className='text-sm lg:text-lg flex items-center gap-4 grow w-44'><FaRegBuilding className='w-5 h-5' />{faculty.faculty}</span>
+          <MdGroupAdd title='add guardian students' className='text-[#000] hover:text-[#fca311] w-6 h-6  lg:w-8 lg:h-8 cursor-pointer' onClick={() => handleStdForm(faculty._id)} />
+          <FaUsersViewfinder title='view guardian students' className='text-[#000] hover:text-[#fca311] w-6 h-6  lg:w-8 lg:h-8 cursor-pointer' onClick={() => handlStdInfo(faculty._id)} />
           <FaTrash onClick={() => deleteFaculty(faculty._id)} className=' cursor-pointer text-[#000] hover:text-[#fca311] w-5 h-5' />
         </li>)
         )}
