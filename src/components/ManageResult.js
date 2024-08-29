@@ -61,9 +61,16 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
     setSem(semester[0]?.semester)
     const getResult = async () => {
       const response = await axios.get("result")
-      if (response.data.length) sorting(response.data)
-      !response.data?.length && sorting(JSON.parse(localStorage.getItem("result")) || [])
-      response.data?.length && localStorage.setItem("result", JSON.stringify([]))
+      if (response.data.length) {
+        sorting(response.data)
+        localStorage.setItem("result", JSON.stringify([]))
+        console.log("length")
+      }
+      else {
+        sorting(JSON.parse(localStorage.getItem("result")) || [])
+        console.log("no length")
+      }
+
     }
     getResult()
 
@@ -170,8 +177,6 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
           withCredentials: true,
         }
       );
-
-      localStorage.setItem("result", JSON.stringify([]));
     } catch (err) {
       console.error("Error handling post:", err);
     }
