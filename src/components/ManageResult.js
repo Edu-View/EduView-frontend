@@ -64,11 +64,11 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
       if (response.data.length) {
         sorting(response.data)
         localStorage.setItem("result", JSON.stringify([]))
-        console.log("length")
+
       }
       else {
         sorting(JSON.parse(localStorage.getItem("result")) || [])
-        console.log("no length")
+
       }
 
     }
