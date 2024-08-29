@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useState } from 'react'
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa'
+import { FaPlus, FaEdit, FaTrash, FaTimes } from 'react-icons/fa'
 import { FaGraduationCap } from 'react-icons/fa'
 import axios from '../api/axios'
 import { IoMdCodeDownload } from 'react-icons/io'
@@ -139,16 +139,13 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
 
     try {
       const desiredTime = new Date(datetime);
-      const now = new Date();
-      const timeUntilExecution = desiredTime.getTime() - now.getTime();
-
       const newResult = {
         rollno,
         semester: sem,
         subjects: subArr,
         grading: gradeArr,
         gradeScore: gradeScoreArr,
-        scheduledTime: desiredTime.toISOString(), // Include the scheduled time
+        scheduledTime: desiredTime.toISOString(),
       };
 
       setList((prev) => [...prev, newResult]);
@@ -214,71 +211,78 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
 
 
   const handleUpdate = async (e) => {
-    const listItem = { rollno, grading: gradeArr, gradeScore: gradeScoreArr, semester: sem, subjects: subArr }
-    const newList = list.map((list) => list.rollno === rollno ? listItem : list)
-    setList(newList)
-    await localStorage.setItem("result", JSON.stringify(newList))
-    e.preventDefault()
-    setSubForm(false)
-    setRollno("")
-    setSubArr([])
-    setGradeArr([])
-    setGradeScoreArr([])
-    setResult(false)
-    setCount(0)
-    setUpdateForm(false)
-    const desiredTime = new Date(datetime);
-    const now = new Date();
-    const timeUntilExecution = !datetime ? 2000 : (desiredTime.getTime() - now.getTime()) + 4000;
+    e.preventDefault();
 
     try {
+      const desiredTime = new Date(datetime);
+      const updatedResult = {
+        rollno,
+        semester: sem,
+        subjects: subArr,
+        grading: gradeArr,
+        gradeScore: gradeScoreArr,
+        scheduledTime: desiredTime.toISOString(),
+      };
 
-      if (timeUntilExecution > 0) {
-        const timer = setTimeout(async () => {
-          await axios.put("/result", JSON.stringify({ rollno: rollno, subjects: subArr, grading: gradeArr, gradeScore: gradeScoreArr }), {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true
-          }
-          )
-        }, timeUntilExecution);
-        return () => clearTimeout(timer);
-      }
+      // Update the local list with the new data
+      const newList = list.map((item) =>
+        item.rollno === rollno ? updatedResult : item
+      );
+      setList(newList);
+      await localStorage.setItem("result", JSON.stringify(newList));
 
+      // Reset the form
+      setSubForm(false);
+      setRollno("");
+      setSubArr([]);
+      setGradeArr([]);
+      setGradeScoreArr([]);
+      setResult(false);
+      setCount(0);
+      setUpdateForm(false);
+
+      // Post the update to the server immediately
+      await axios.put(
+        "/result",
+        JSON.stringify(updatedResult),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      localStorage.setItem("result", JSON.stringify([]));
     } catch (err) {
-      console.log(err);
+      console.error("Error handling update:", err);
     }
-  }
+  };
+
 
   const handleDelete = async (roll) => {
-
     try {
-      const newList = list.filter(list => list.rollno !== roll)
-      setList(newList)
-      await localStorage.setItem("result", JSON.stringify(newList))
+      // Update local state and localStorage
+      const newList = list.filter(list => list.rollno !== roll);
+      setList(newList);
+      await localStorage.setItem("result", JSON.stringify(newList));
 
+      // Calculate the scheduled time
       const desiredTime = new Date(datetime);
-      const now = new Date();
-      const timeUntilExecution = !datetime ? 2000 : (desiredTime.getTime() - now.getTime()) + 4000;
+      const deleteData = { rollno: roll, scheduledTime: desiredTime.toISOString() };
 
-      if (timeUntilExecution > 0) {
-        const timer = setTimeout(async () => {
-          await axios.delete("/result", {
-            headers: {
-              "Content-Type": "application/json"
-            },
-            withCredentials: true,
-            data: JSON.stringify({ rollno: roll })
-          });
-
-        }, timeUntilExecution);
-        return () => clearTimeout(timer);
-      }
-
+      // Send the delete request to the backend with the scheduled time
+      await axios.delete("/result", {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true,
+        data: JSON.stringify(deleteData)
+      });
 
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
 
   const handleDeleteAll = async () => {
     setConfirmForm(false)
@@ -388,9 +392,12 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
         updateForm &&
         <article className='fixed w-screen h-screen left-0 top-0 flex justify-center items-center bg-transparent grow overflow-y-auto'>
           <form className='p-6 bg-[#000] min-h-80 fixed top-1/4  flex flex-col rounded-xl min-w-52' name='result update form'>
-            <label className='flex justify-between mb-2 text-[#e5e5e5]'>
-              {rollno}
-            </label>
+            <span className='flex justify-between'>
+              <label className='flex justify-between mb-2 text-[#e5e5e5]'>
+                {rollno}
+              </label>
+              <FaTimes className='w-5 h-5 text-white hover:text-[#fca311]' onClick={() => setUpdateForm(false)} />
+            </span>
             {subForm &&
               <section className='p-2 flex flex-col gap-6 items-start'>
                 <label className='text-[#e5e5e5] mx-2'>{subArr[count]}</label>
@@ -409,7 +416,7 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
 
                 ))
                 }
-                <span className='flex'>
+                <span className='flex gap-4'>
                   <button type="submit" className='p-2 px-6 border border-[#fca311] rounded-xl bg-white' onClick={handleUpdate}>Update</button>
                   <button className='p-2 px-6 bg-[#fca311] rounded-xl text-[#000] hover:scale-105 max-w-40' onClick={handleUpdateCancel}>Cancel</button>
                 </span>
@@ -429,7 +436,7 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
               <input type="text" name='confirm' className='p-2   border focus:border-[#fca311]  rounded-lg font-Concert shadow-md shadow-[#13213d]  outline-none w-full text-[#000]' autoComplete='off' value={confirmQuestion} onChange={(e) => setConfirmQuestion(e.target.value)} />
             </span>
             <span>
-              <button type='submit' className='bg-[#f00] p-2 px-4 rounded-lg mt-2 mr-4 disabled:opacity-55 disabled:pointer-events-none' onClick={handleDeleteAll} disabled={confirmQuestion === "Delete all result" ? false : true}>
+              <button type='submit' className='bg-[#f00] p-2 px-4 rounded-lg mt-2 mr-4 disabled:opacity-55 disabled:cursor-not-allowed' onClick={handleDeleteAll} disabled={confirmQuestion === "Delete all result" ? false : true}>
                 Delete
               </button>
               <button className='bg-[#e5e5e5] p-2 px-4 rounded-lg mt-2 mr-4 text-[#14213d]' onClick={() => setConfirmForm(false)}>Cancel</button>

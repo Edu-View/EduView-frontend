@@ -98,7 +98,7 @@ const ManageSemester = ({ semester, setSemester, mobile, setMobile }) => {
         {semester.map((semester) =>
         (<li key={semester._id} className='w-full lg:w-2/3 shadow-sm  p-3 font-Concert rounded-xl  flex justify-between  shadow-[#13213d] items-center  bg-[#fff] text-[#000]'>
           <span className='flex gap-4 items-center text-xl'><FaRegCalendarAlt className='w-5 h-5' />{semester.semester}</span>
-          <button onClick={() => deleteSemester(semester._id)} className=' cursor-pointer p-1 lg:p-2 px-3 lg:px-6 rounded-2xl shadow-md shadow-[#13213d] bg-[#000]  text-[#fff]  flex gap-4 items-center hover:scale-105'>Delete <FaTrash /></button>
+          <button onClick={() => deleteSemester(semester._id)} className=' cursor-pointer p-2 px-4 lg:px-6 rounded-2xl shadow-md shadow-[#13213d] bg-[#000]  text-[#fff]  flex gap-4 items-center hover:scale-105'>Delete <FaTrash /></button>
         </li>)
         )}
       </ul>

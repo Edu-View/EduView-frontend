@@ -194,16 +194,15 @@ const ManageFaculty = ({ faculty, setFaculty, mobile, setMobile, student }) => {
 
       {stdInfo &&
         <article className='w-screen h-screen bg-transparent fixed left-0 top-0 flex justify-center items-center p-2'>
-
           <section className='flex flex-col bg-[#000] border border-[#fff] p-6 w-full lg:w-1/2  text-[#fca311] gap-4 rounded-xl animate-open-menu flew items-end'>
             <button onClick={() => setStdInfo(!stdInfo)} className='bg-[#fca311] text-[#000] w-12 h-12  rounded-xl flex items-center justify-center'>
               <FaTimes />
             </button>
             <h2 className='text-[#fca311] text-xl w-full text-left'>{faculty.filter(fac => fac._id === updateId)[0].faculty}</h2>
-            <section className='overflow-y-auto w-full flex flex-col gap-2'>
+            <section className='overflow-y-auto grow w-full flex flex-col gap-2 max-h-80'>
               {!rollAray.length && <span className='text-[#fff]'>No Guardian student in this faculty</span>}
               {rollAray.map((element, index) =>
-                <span className='bg-[#e5e5e5] text-[#000] p-3 rounded-xl flex items-center justify-start gap-8 w-full' key={index}>
+                <span className='bg-[#e5e5e5] text-[#000] p-3 rounded-xl flex  justify-start text-sm lg:text-lg items-center w-full gap-2' key={index}>
                   <span className='w-20'> {student.find(std => std._id === element).rollno}</span>
                   <span className='w-40'>{student.find(std => std._id === element).username}</span>
                   <span>{student.find(std => std._id === element).semester}</span>
