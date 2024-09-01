@@ -143,7 +143,6 @@ const Assessment = ({ mobile, setMobile, teacher }) => {
             }
             return getNumber(a[0]?.rollno) - getNumber(b[0]?.rollno);
         });
-
         setList(sortedStudents)
         setFilteredList(response.data.filter(li => li.type === type && li.subjects === sub))
     }
