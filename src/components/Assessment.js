@@ -113,6 +113,7 @@ const Assessment = ({ mobile, setMobile, teacher }) => {
             setUpdateForm(false)
             const response = await axios.get("assessment")
             await setList(response.data)
+            await setFilteredList(response.data)
         }
         catch (err) {
             console.log(err)
