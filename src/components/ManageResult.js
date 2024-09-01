@@ -62,9 +62,9 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
     const getResult = async () => {
       const response = await axios.get("result")
       if (response.data.length) {
+
         sorting(response.data)
         localStorage.setItem("result", JSON.stringify([]))
-
       }
       else {
         sorting(JSON.parse(localStorage.getItem("result")) || [])
@@ -234,6 +234,7 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
         item.rollno === rollno ? updatedResult : item
       );
       setList(newList);
+      console.log(newList)
       await localStorage.setItem("result", JSON.stringify(newList));
 
       // Reset the form
@@ -255,8 +256,6 @@ const ManageResult = ({ mobile, setMobile, student, subject, semester }) => {
           withCredentials: true,
         }
       );
-
-      localStorage.setItem("result", JSON.stringify([]));
     } catch (err) {
       console.error("Error handling update:", err);
     }
