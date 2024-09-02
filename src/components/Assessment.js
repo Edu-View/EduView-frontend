@@ -21,7 +21,8 @@ const Assessment = ({ mobile, setMobile, teacher }) => {
     useEffect(() => {
         const getAssessment = async () => {
             const response = await axios.get("assessment")
-            sorting(response.data)
+            setList(response.data)
+            setFilteredList(response.data)
         }
         getAssessment()
     }, [])
@@ -49,7 +50,8 @@ const Assessment = ({ mobile, setMobile, teacher }) => {
                 }
                 )
                 const response = await axios.get("assessment")
-                await sorting(response.data)
+                await setList(response.data)
+                await setFilteredList(response.data.filter(li => li.type === type && li.subjects === sub))
                 setForm(false)
                 setStdRoll("")
                 setReceive("")
@@ -90,7 +92,7 @@ const Assessment = ({ mobile, setMobile, teacher }) => {
             });
 
             const response = await axios.get("assessment")
-            await sorting(response.data)
+            await setList(response.data)
         } catch (err) {
             console.log(err);
         }
@@ -110,41 +112,11 @@ const Assessment = ({ mobile, setMobile, teacher }) => {
             setUpdateId("")
             setUpdateForm(false)
             const response = await axios.get("assessment")
-            await sorting(response.data)
+            await setList(response.data)
         }
         catch (err) {
             console.log(err)
         }
-    }
-
-    const sorting = (student) => {
-        const rollOrder = {
-            "CST": 1,
-            "CS": 2,
-            "CT": 3,
-        };
-        const getPrefix = (rollno) => {
-            if (rollno.includes("CST")) return "CST";
-            if (rollno.includes("CS")) return "CS";
-            if (rollno.includes("CT")) return "CT";
-            return ""; // Fallback if no prefix matches
-        };
-        const getNumber = (rollno) => {
-            const match = rollno.match(/-(\d+)/);
-            return match ? parseInt(match[1], 10) : 0;
-        };
-        const sortedStudents = student.sort((a, b) => {
-
-            const prefixA = getPrefix(a[0]?.rollno);
-            const prefixB = getPrefix(b[0]?.rollno);
-            const prefixComparison = rollOrder[prefixA] - rollOrder[prefixB];
-            if (prefixComparison !== 0) {
-                return prefixComparison;
-            }
-            return getNumber(a[0]?.rollno) - getNumber(b[0]?.rollno);
-        });
-        setList(sortedStudents)
-        setFilteredList(response.data.filter(li => li.type === type && li.subjects === sub))
     }
 
     return (
